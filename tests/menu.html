@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>Menu Engine Test</title>
+		<script type="text/javascript" charset="utf-8" src='../font/ct_en_mono.js'></script>
+		<script type="text/javascript" charset="utf-8" src="../src/MonoTextII.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/MonoMenu.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/InputDetection.js"></script>
+		<script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+	</head>
+	<body id="text" onload="test()">
+		<div id="controlWrap" style="position: relative;">
+			<canvas id="dialog" width='512' height='448' style='border: 1px solid black;'></canvas>
+		</div>
+		<script type="text/javascript" charset="utf-8">
+			function test(){
+				
+				this.something = 0;
+				
+				this.key = new InputDetection(window, this);
+				this.menu = new MonoMenu(256, 224);
+
+				window.addEventListener('keyup', function(e){
+					if(e.keyCode == 32){ // +=
+						console.log(32);
+						this.something++;
+						this.menu.showMenu(this.something);
+					}
+					if(e.keyCode == 16 ){ // LEFT SHIFT
+						// activate menu
+						this.menu.showMenu();
+					}
+				}, false);
+				
+				this.start = function(){
+					var me = this;
+					me.ref = setInterval(function(){
+						me.main();
+					}, 30);
+				};
+				this.stop = function(){
+					clearInterval(this.ref);
+					this.ref = null;
+				};
+				this.main = function(){
+					this.checkInput();
+				};
+				this.checkInput = function(){
+					
+				};
+				
+				// scales the whole canvas 
+				document.getElementById('dialog').getContext('2d').scale(2, 2);
+			}
+		</script>
+	</body>
+</html>

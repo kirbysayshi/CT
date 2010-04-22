@@ -1,0 +1,40 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>Map Engine Test</title>
+		<script type="text/javascript" charset="utf-8" src="../src/CollisionDetection.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/Map.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../maps/EndOfTime.js"></script>
+		<script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+	</head>
+	<body id="text" onload="test()">
+		<canvas id="map" width='512' height='448' style='border: 1px solid black;'></canvas>
+		<script type="text/javascript" charset="utf-8">
+			
+			var eot = new EndOfTime(document.getElementById('map'), 256, 224);
+			
+			var cd = new CollisionDetection();
+			
+			function test(){
+				
+				// in poly (portals)
+				console.log(cd.isPointInPoly(eot.walkable, {x: 110, y: 136}));
+				
+				// in poly
+				console.log(cd.isPointInPoly(eot.walkable, {x: 153, y: 174}));
+				
+				// in hole
+				console.log(cd.isPointInPoly(eot.walkable, {x: 368, y: 294}));
+
+				// outside
+				console.log(cd.isPointInPoly(eot.walkable, {x: 469, y: 350}));
+				
+				
+				// scales the whole canvas 
+				document.getElementById('map').getContext('2d').scale(2, 2);
+			}
+		</script>
+	</body>
+</html>

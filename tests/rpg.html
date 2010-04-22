@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>RPG Engine Test</title>
+		<script type="text/javascript" charset="utf-8" src='../src/Util.js'></script>
+		<script type="text/javascript" charset="utf-8" src="../src/FPSMonitor.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/RPG.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/Database.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/SimpleSprite.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/ComplexSprite.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/InputDetection.js"></script>
+		<script type="text/javascript" charset="utf-8" src='../font/ct_en_mono.js'></script>
+		<script type="text/javascript" charset="utf-8" src="../src/MonoText.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/Event.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/Map.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/Door.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/AssetLoader.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../maps/EndOfTime.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../maps/EndOfTimeSpekkio.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../sprites/Crono.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../sprites/LightPillar.js"></script>
+		<script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+	</head>
+	<body id="text" onload="CT()">
+		<canvas id="map" width='512' height='448' style='border: 1px solid black;'></canvas>
+		<div id="FPS"></div>
+		<div id="debug"></div>
+		<script type="text/javascript" charset="utf-8">
+			function CT(){
+				
+				var rpg = new RPG(window, document.getElementById('map'), 30, 256, 224);
+				var fps = new FPSMonitor();
+				var fpsmeter = document.getElementById('FPS');
+				var debug = document.getElementById('debug');
+				
+				rpg.assetList = {
+					'EndOfTime_lower': 			['image', "../images/maps/png/eot_layered_lower.png"],
+					'EndOfTime_upper': 			['image', "../images/maps/png/eot_layered_upper.png"],
+					'EndOfTimeSpekkio_lower': 	['image', '../images/maps/png/spekkio_layered_lower.png'],
+					'EndOfTimeSpekkio_upper': 	['image', '../images/maps/png/spekkio_layered_upper.png'],
+					'Crono': 					['image', "../sprites/crono_all.png"],
+					'LightPillar': 				['image', "../sprites/pillar_of_light.png"] 
+				};
+				rpg.preload();
+				
+				// this overrides the default method to add the FPS meter
+				rpg.main = function(){
+					this.render();
+					this.checkInput();
+					this.key.ellapse();
+					this.checkProximityEvents();
+					fpsmeter.innerHTML = fps.check();
+					this.printDebugInfo(debug);
+				};
+				
+				// scales the whole canvas 
+				document.getElementById('map').getContext('2d').scale(2, 2);
+			}
+		</script>
+	</body>
+</html>

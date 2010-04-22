@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>Map Engine Test</title>
+		<script type="text/javascript" charset="utf-8" src="../src/FPSMonitor.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/Map.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../maps/EndOfTime.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/InputDetection.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/RPG.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/SimpleSprite.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/ComplexSprite.js"></script>
+		<script type="text/javascript" charset="utf-8" src="../src/sprites/Crono.js"></script>
+		<script type="text/javascript" charset="utf-8" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+	</head>
+	<body id="text" onload="test()">
+		<canvas id="map" width='512' height='448' style='border: 1px solid black;'></canvas>
+		<div id="FPS"></div>
+		<script type="text/javascript" charset="utf-8">
+			function test(){
+				var canvas = document.getElementById('map');
+				var fpsMeter = document.getElementById('FPS');
+				var fps = new FPSMonitor();
+				var map = new EndOfTime(canvas, 256, 224);
+				var crono = new Crono();
+				
+				// set initial position on the MAP, not the canvas
+				crono.mapX = 77;
+				crono.mapY = 77;
+				
+				crono.setSequence('walk_down');
+				
+				// this is for the game loop mostly
+				var rpg = new RPG(window, canvas, 30, 256, 224);
+				rpg.main = function(){
+					map.draw();
+					crono.draw(canvas.getContext('2d'), map.x, map.y, crono);
+					if( this.key.isDown(InputDetection.RIGHT_ARROW) ) {
+
+						if(map.isPointInPoly(map.walkable, {x: crono.registrationX + crono.getSpeed(), y: crono.registrationY})){
+							crono.moveRight(crono.getSpeed());
+							
+							if(crono.x > map.vWidth * 0.5)
+								map.scrollRight(crono.getSpeed());
+						}
+					}
+					if( this.key.isDown(InputDetection.LEFT_ARROW) ) {
+						//map.scrollLeft();
+						if(map.isPointInPoly(map.walkable, {x: crono.registrationX - crono.getSpeed(), y: crono.registrationY})){
+							crono.moveLeft(crono.getSpeed());
+							
+							if(crono.x < map.vWidth * 0.5)
+								map.scrollLeft(crono.getSpeed());
+						}
+					}
+					if( this.key.isDown(InputDetection.UP_ARROW) ) {
+						//map.scrollUp();
+						if(map.isPointInPoly(map.walkable, {x: crono.registrationX, y: crono.registrationY - crono.getSpeed()})){
+							crono.moveUp(crono.getSpeed());
+							
+							if(crono.y < map.vHeight * 0.5)
+								map.scrollUp(crono.getSpeed());
+						}
+					}
+					if( this.key.isDown(InputDetection.DOWN_ARROW) ) {
+						//map.scrollDown();
+						if(map.isPointInPoly(map.walkable, {x: crono.registrationX, y: crono.registrationY + crono.getSpeed()})){
+							crono.moveDown(crono.getSpeed());
+							
+							if(crono.y > map.vHeight * 0.5)
+								map.scrollDown(crono.getSpeed());
+						}
+					}
+					
+					// Holding shift activates running
+					if( this.key.isDown(InputDetection.SHIFT) ){
+						crono.isRunning = true;
+					} else
+						crono.isRunning = false;
+					
+					fpsMeter.innerHTML = fps.check();
+				};
+				rpg.start();
+				
+				// scales the whole canvas 
+				document.getElementById('map').getContext('2d').scale(2, 2);
+			}
+		</script>
+	</body>
+</html>

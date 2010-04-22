@@ -1,0 +1,3 @@
+A JavaScript RPG engine, for creating games in the style of Chrono Trigger. Everything is drawn using html5 canvas, and there is support for display lists, as in Flash.
+
+Clone the repo, and run the tests/rpg.html file in a browser...
